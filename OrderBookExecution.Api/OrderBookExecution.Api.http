@@ -1,0 +1,6 @@
+@OrderBookExecution.Api_HostAddress = http://localhost:5298
+
+GET {{OrderBookExecution.Api_HostAddress}}/orderbookexecution/
+Accept: application/json
+
+###
