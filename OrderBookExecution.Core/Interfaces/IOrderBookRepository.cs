@@ -4,5 +4,5 @@ namespace OrderBookExecution.Core.Interfaces;
 
 public interface IOrderBookRepository
 {
-    Task<List<Exchange>> GetExchangesDataAsync();
+    Task<IEnumerable<Exchange>> GetExchangesDataAsync();
 }

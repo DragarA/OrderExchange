@@ -29,13 +29,18 @@ public class OrderBookRepository: IOrderBookRepository
             throw new FileNotFoundException($"JSON data file not found: {_filePath}");        
     }
     
-    public async Task<List<Exchange>> GetExchangesDataAsync()
+    public async Task<IEnumerable<Exchange>> GetExchangesDataAsync()
     {
         try
         {
             var textLines = await File.ReadAllLinesAsync(_filePath);
 
-            return textLines.Select(ParseJsonLineToExchange).ToList();
+            var exchanges = new List<Exchange>();
+            foreach (var line in textLines)
+            {
+                exchanges.Add(ParseJsonLineToExchange(line));
+            }
+            return exchanges;
         }
         catch (JsonException ex)
         {
@@ -43,11 +48,11 @@ public class OrderBookRepository: IOrderBookRepository
         }
         catch (IOException ex)
         {
-            throw new InvalidOperationException("Failed to read file");
+            throw new InvalidOperationException("Failed to read file", ex);
         }
     }
 
-    private Exchange ParseJsonLineToExchange(string line)
+    public Exchange ParseJsonLineToExchange(string line)
     {
         var splitValues = line.Split('\t');
 
