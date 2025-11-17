@@ -18,7 +18,7 @@ public class ExchangeBuilder
         return new ExchangeBuilder();
     }
 
-    public ExchangeBuilder AddExchange(string exchangeId, List<AddExchangeOrderParams> exchangeOrderParams)
+    public ExchangeBuilder AddExchange(string exchangeId, List<AddExchangeOrderParams> exchangeOrderParams, ExchangeBalance? balance = null)
     {
         var bids = new List<OrderWrapper>();
         var asks = new List<OrderWrapper>();
@@ -60,6 +60,11 @@ public class ExchangeBuilder
                 AcqTime = "",
                 Bids = bids,
                 Asks = asks
+            }, 
+            ExchangeBalance = balance ?? new ExchangeBalance
+            {
+                BtcBalance = 10,
+                EurBalance = 10000,
             }
         });
         return this;

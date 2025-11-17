@@ -13,7 +13,13 @@ public static class DependencyInjection
         services.AddScoped<IOrderBookRepository>(sp =>
         {
             var config = sp.GetRequiredService<IConfiguration>();
-            return new OrderBookRepository(config);
+            var relativePath = config["DataSource:FilePath"];
+            
+            if(string.IsNullOrEmpty(relativePath))
+                throw new InvalidOperationException("JSON file path is not configured.");
+            
+            var fullPath = Path.Combine(AppContext.BaseDirectory, relativePath);
+            return new OrderBookRepository(fullPath);
         });
 
         services.AddScoped<IOrderBookExecutionService, OrderBookExecutionService>();

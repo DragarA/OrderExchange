@@ -27,24 +27,12 @@ public class OrderBookRepositoryTests
     }
 
     [Test]
-    public void Ctor_MissingFilePathConfig_ThrowsInvalidOperationException()
-    {
-        var config = BuildConfig(null);
-
-        Assert.That(
-            () => new OrderBookRepository(config),
-            Throws.TypeOf<InvalidOperationException>()
-                .With.Message.EqualTo("JSON file path is not configured."));
-    }
-
-    [Test]
     public void Ctor_FileDoesNotExist_ThrowsFileNotFoundException()
     {
         var nonExistingPath = Path.Combine(Path.GetTempPath(), "non-existing.json");
-        var config = BuildConfig(nonExistingPath);
 
         Assert.That(
-            () => new OrderBookRepository(config),
+            () => new OrderBookRepository(nonExistingPath),
             Throws.TypeOf<FileNotFoundException>()
                 .With.Message.Contains("JSON data file not found"));
     }
@@ -61,7 +49,7 @@ public class OrderBookRepositoryTests
         await File.WriteAllTextAsync(tempFile, line);
 
         var config = BuildConfig(tempFile);
-        var repo = new OrderBookRepository(config);
+        var repo = new OrderBookRepository(tempFile);
 
         try
         {
@@ -96,9 +84,8 @@ public class OrderBookRepositoryTests
         var line = $"{exchangeId}\t{invalidJson}";
 
         await File.WriteAllTextAsync(tempFile, line);
-
-        var config = BuildConfig(tempFile);
-        var repo = new OrderBookRepository(config);
+        
+        var repo = new OrderBookRepository(tempFile);
 
         try
         {
@@ -123,8 +110,7 @@ public class OrderBookRepositoryTests
         var badLine = "bad-line";
         await File.WriteAllTextAsync(tempFile, badLine);
 
-        var config = BuildConfig(tempFile);
-        var repo = new OrderBookRepository(config);
+        var repo = new OrderBookRepository(tempFile);
 
         try
         {

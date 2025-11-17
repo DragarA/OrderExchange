@@ -17,6 +17,13 @@
     </ItemGroup>
 
     <ItemGroup>
+        <None Include="..\data\order_books_data" Link="data/order_books_data">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+
+    <ItemGroup>
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>

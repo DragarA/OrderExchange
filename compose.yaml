@@ -1,0 +1,12 @@
+﻿services:
+  orderbookexecution.api:
+    image: orderbookexecution.api
+    build:
+      context: .
+      dockerfile: OrderBookExecution.Api/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Production"
+      DataSource:FilePath: "data/order_books_data"
+

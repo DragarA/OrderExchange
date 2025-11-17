@@ -8,10 +8,10 @@ public class OrderBookExecutionService(IOrderBookRepository orderBookRepository)
     public async Task<ExecutionPlan?> GetBestExecutionPlanAsync(OrderParameters orderParameters)
     {
         var exchanges = await orderBookRepository.GetExchangesDataAsync();
-        return CalculateBestExecutionPlan(exchanges, orderParameters);
+        return CalculateBestExecutionPlan(exchanges.ToList(), orderParameters);
     }
 
-    internal ExecutionPlan? CalculateBestExecutionPlan(IEnumerable<Exchange> exchanges, OrderParameters orderParameters)
+    internal ExecutionPlan? CalculateBestExecutionPlan(List<Exchange> exchanges, OrderParameters orderParameters)
     {
         var executionPlanActions = new List<ExecutionPlanAction>();
 
@@ -19,12 +19,47 @@ public class OrderBookExecutionService(IOrderBookRepository orderBookRepository)
             return null;
 
         var crossExchangeOrderList = GetCrossExchangeOrdersForType(exchanges, orderParameters.OrderType);
-
+        
+        var balances = exchanges.ToDictionary(
+            e => e.Id,
+            e => e.ExchangeBalance
+        );
+        
         var remainingAmountToFill = orderParameters.Amount;
 
         foreach (var exchangeOrder in crossExchangeOrderList)
         {
+            if (!balances.TryGetValue(exchangeOrder.ExchangeId, out var exchangeBalance))
+                continue;
+            
             var amountToFill = Math.Min(exchangeOrder.Order.Amount, remainingAmountToFill);
+
+            if (orderParameters.OrderType == OrderType.Buy)
+            {
+                if (exchangeBalance.EurBalance <= 0 || exchangeOrder.Order.Price <= 0)
+                    continue;
+                
+                var maxAmountByExchangeBalance = exchangeBalance.EurBalance / exchangeOrder.Order.Price;
+                
+                amountToFill = Math.Min(amountToFill, maxAmountByExchangeBalance);
+
+                if (amountToFill <= 0)
+                    continue;
+                
+                exchangeBalance.EurBalance -= amountToFill * exchangeOrder.Order.Price;
+                exchangeBalance.BtcBalance += amountToFill;
+            }
+            else
+            {
+                amountToFill = Math.Min(amountToFill, exchangeBalance.BtcBalance);
+
+                if (amountToFill <= 0)
+                    continue;
+                
+                exchangeBalance.EurBalance += amountToFill * exchangeOrder.Order.Price;
+                exchangeBalance.BtcBalance -= amountToFill;
+            }
+            
             executionPlanActions.Add(new ExecutionPlanAction
             {
                 Price = exchangeOrder.Order.Price,

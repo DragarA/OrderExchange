@@ -89,3 +89,4 @@ _ReSharper*/
 /Properties/launchSettings.json
 
 data/*
+!data/order_books_data

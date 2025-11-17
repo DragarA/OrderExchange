@@ -16,15 +16,9 @@ public class OrderBookRepository: IOrderBookRepository
         Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) }
     };
 
-    public OrderBookRepository(IConfiguration config)
+    public OrderBookRepository(string path)
     {
-        var path = config["DataSource:FilePath"];
-
-        if (string.IsNullOrWhiteSpace(path))
-            throw new InvalidOperationException("JSON file path is not configured.");
-
-        _filePath = Path.GetFullPath(path);
-
+        _filePath = path;
         if (!File.Exists(_filePath))
             throw new FileNotFoundException($"JSON data file not found: {_filePath}");        
     }
@@ -71,7 +65,12 @@ public class OrderBookRepository: IOrderBookRepository
         return new Exchange
         {
             Id = splitValues[0],
-            OrderBook = model
+            OrderBook = model,
+            ExchangeBalance = new ExchangeBalance
+            {
+                BtcBalance = 1,
+                EurBalance = 10000,
+            }
         };
     }
 }

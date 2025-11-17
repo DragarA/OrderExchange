@@ -33,7 +33,7 @@ public class App(IOrderBookExecutionService orderBookExecutionService, IConfigur
 
         if (!executionPlan.IsFullyFilled)
         {
-            System.Console.WriteLine($"Execution Plan is not fully filled due to not enough liquidity. Unfilled amount: ${executionPlan.RemainingUnfilledAmount}");
+            System.Console.WriteLine($"Execution Plan is not fully filled due to not enough liquidity. Unfilled amount: {executionPlan.RemainingUnfilledAmount} BTC");
         }
         
     }
