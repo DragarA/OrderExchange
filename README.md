@@ -84,7 +84,7 @@ Example request (POST /api/OrderBookExecution):
 }
 ```
 
-The response is a list of execution actions with exchange ID, price, amount and order side. If the order could not be fully fulfilled, we indicate taht via the `isFullyFilled` flag and return the unfilled amount.  
+The response is a list of execution actions with exchange ID, price, amount and order side. If the order could not be fully fulfilled, we indicate that via the `isFullyFilled` flag and return the unfilled amount.  
 
 ```json
 {
