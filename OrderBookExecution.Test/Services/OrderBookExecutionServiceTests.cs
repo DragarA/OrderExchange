@@ -384,8 +384,10 @@ public class OrderBookExecutionServiceTests
             Amount = amount
         };
 
-        var result = _orderBookExecutionService.CalculateBestExecutionPlan(exchanges, orderParameters);
-        
-        Assert.That(result, Is.Null);
+        Assert.That(
+            () => _orderBookExecutionService.CalculateBestExecutionPlan(exchanges, orderParameters),
+            Throws.TypeOf<ArgumentException>()
+                .With.Message.Contains("Amount must be greater than zero"));
+
     }
 }

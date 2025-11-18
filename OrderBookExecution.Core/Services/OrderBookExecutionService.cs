@@ -15,6 +15,11 @@ public class OrderBookExecutionService(IOrderBookRepository orderBookRepository)
     {
         var executionPlanActions = new List<ExecutionPlanAction>();
 
+        if (orderParameters.Amount <= 0)
+        {
+            throw new ArgumentException("Amount must be greater than zero");
+        }
+
         var crossExchangeOrderList = GetCrossExchangeOrdersForType(exchanges, orderParameters.OrderType);
         
         var balances = exchanges.ToDictionary(
