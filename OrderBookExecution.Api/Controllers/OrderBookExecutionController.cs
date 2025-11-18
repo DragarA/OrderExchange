@@ -17,17 +17,8 @@ public class OrderBookExecutionController(IOrderBookExecutionService orderBookEx
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var orderParams = new OrderParameters
-        {
-            Amount = orderBookExecutionReq.Amount,
-            OrderType = orderBookExecutionReq.OrderType,
-        };
-
-        var executionPlan = await orderBookExecutionService.GetBestExecutionPlanAsync(orderParams);
+        var executionPlan = await orderBookExecutionService.GetBestExecutionPlanAsync(orderBookExecutionReq.ToOrderParameters());
         
-        if(executionPlan == null)
-            return BadRequest();
-
         return Ok(executionPlan.ToDto());
     }
 }

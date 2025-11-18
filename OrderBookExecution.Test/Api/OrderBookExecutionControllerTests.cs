@@ -42,17 +42,17 @@ public class OrderBookExecutionControllerIntegrationTests
         var body = await response.Content.ReadFromJsonAsync<GetOrderBookExecutionResDto>();
 
         Assert.That(body, Is.Not.Null);
-        Assert.That(body.ExecutionActons.Count, Is.EqualTo(2));
+        Assert.That(body.ExecutionActions.Count, Is.EqualTo(2));
 
-        Assert.That(body.ExecutionActons.First().ExchangeId, Is.EqualTo("EX1"));
-        Assert.That(body.ExecutionActons.First().OrderType, Is.EqualTo(OrderType.Buy));
-        Assert.That(body.ExecutionActons.First().Amount, Is.EqualTo(0.5m));
-        Assert.That(body.ExecutionActons.First().Price, Is.EqualTo(2950m));
+        Assert.That(body.ExecutionActions.First().ExchangeId, Is.EqualTo("EX1"));
+        Assert.That(body.ExecutionActions.First().OrderType, Is.EqualTo(OrderType.Buy));
+        Assert.That(body.ExecutionActions.First().Amount, Is.EqualTo(0.5m));
+        Assert.That(body.ExecutionActions.First().Price, Is.EqualTo(2950m));
 
-        Assert.That(body.ExecutionActons.Last().ExchangeId, Is.EqualTo("EX2"));
-        Assert.That(body.ExecutionActons.Last().OrderType, Is.EqualTo(OrderType.Buy));
-        Assert.That(body.ExecutionActons.Last().Amount, Is.EqualTo(0.5m));
-        Assert.That(body.ExecutionActons.Last().Price, Is.EqualTo(2960m));
+        Assert.That(body.ExecutionActions.Last().ExchangeId, Is.EqualTo("EX2"));
+        Assert.That(body.ExecutionActions.Last().OrderType, Is.EqualTo(OrderType.Buy));
+        Assert.That(body.ExecutionActions.Last().Amount, Is.EqualTo(0.5m));
+        Assert.That(body.ExecutionActions.Last().Price, Is.EqualTo(2960m));
     }
 
     [Test]

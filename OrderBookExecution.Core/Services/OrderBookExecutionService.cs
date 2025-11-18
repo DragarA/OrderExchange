@@ -5,18 +5,15 @@ namespace OrderBookExecution.Core.Services;
 
 public class OrderBookExecutionService(IOrderBookRepository orderBookRepository) : IOrderBookExecutionService
 {
-    public async Task<ExecutionPlan?> GetBestExecutionPlanAsync(OrderParameters orderParameters)
+    public async Task<ExecutionPlan> GetBestExecutionPlanAsync(OrderParameters orderParameters)
     {
         var exchanges = await orderBookRepository.GetExchangesDataAsync();
         return CalculateBestExecutionPlan(exchanges.ToList(), orderParameters);
     }
 
-    internal ExecutionPlan? CalculateBestExecutionPlan(List<Exchange> exchanges, OrderParameters orderParameters)
+    internal ExecutionPlan CalculateBestExecutionPlan(List<Exchange> exchanges, OrderParameters orderParameters)
     {
         var executionPlanActions = new List<ExecutionPlanAction>();
-
-        if (orderParameters.Amount <= 0)
-            return null;
 
         var crossExchangeOrderList = GetCrossExchangeOrdersForType(exchanges, orderParameters.OrderType);
         
@@ -36,7 +33,7 @@ public class OrderBookExecutionService(IOrderBookRepository orderBookRepository)
 
             if (orderParameters.OrderType == OrderType.Buy)
             {
-                if (exchangeBalance.EurBalance <= 0 || exchangeOrder.Order.Price <= 0)
+                if (exchangeOrder.Order.Price <= 0)
                     continue;
                 
                 var maxAmountByExchangeBalance = exchangeBalance.EurBalance / exchangeOrder.Order.Price;
@@ -91,6 +88,8 @@ public class OrderBookExecutionService(IOrderBookRepository orderBookRepository)
         var orderList = new List<(string ExchangeId, Order Order)>();
         foreach (var exchange in exchanges)
         {
+            if (!IsExchangeTransactionCapable(exchange.ExchangeBalance, orderType)) continue;
+            
             orderList.AddRange(orderType == OrderType.Buy
                 ? exchange.OrderBook.Asks.Select(orderWrapper => (exchange.Id, orderWrapper.Order))
                 : exchange.OrderBook.Bids.Select(orderWrapper => (exchange.Id, orderWrapper.Order)));
@@ -99,5 +98,17 @@ public class OrderBookExecutionService(IOrderBookRepository orderBookRepository)
         return orderType == OrderType.Buy
             ? orderList.OrderBy(o => o.Order.Price)
             : orderList.OrderByDescending(o => o.Order.Price);
+    }
+
+    private bool IsExchangeTransactionCapable(ExchangeBalance exchangeBalance, OrderType orderType)
+    {
+        switch (orderType)
+        {
+            case OrderType.Buy when exchangeBalance.EurBalance <= 0:
+            case OrderType.Sell when exchangeBalance.BtcBalance <= 0:
+                return false;
+            default:
+                return true;
+        }
     }
 }

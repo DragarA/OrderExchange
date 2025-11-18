@@ -12,7 +12,7 @@ public static class OrderBookExecutionResponseMapper
         {
             IsFullyFilled =  executionPlan.IsFullyFilled,
             RemainingAmountToFill = executionPlan.RemainingUnfilledAmount,
-            ExecutionActons = executionPlan.ExecutionPlanActions.Select(planAction => new GetOrderBookExecutionActionDto
+            ExecutionActions = executionPlan.ExecutionPlanActions.Select(planAction => new GetOrderBookExecutionActionDto
             {
                 Price = planAction.Price,
                 Amount = planAction.Amount,

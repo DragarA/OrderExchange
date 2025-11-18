@@ -11,6 +11,7 @@ public class App(IOrderBookExecutionService orderBookExecutionService, IConfigur
         if (!TryParseArgs(args, out var orderType, out var amount))
         {
             System.Console.WriteLine("Usage: dotnet run <buy|sell> <amount>");
+            return;
         }
 
         var orderParameters = new OrderParameters
@@ -20,9 +21,6 @@ public class App(IOrderBookExecutionService orderBookExecutionService, IConfigur
         };
         
         var executionPlan = await orderBookExecutionService.GetBestExecutionPlanAsync(orderParameters);
-
-        if (executionPlan == null)
-            System.Console.WriteLine("No execution plan available");
         
         System.Console.WriteLine("Execution Plans:");
         foreach (var executionPlanAction in executionPlan.ExecutionPlanActions)

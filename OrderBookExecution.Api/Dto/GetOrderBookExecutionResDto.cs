@@ -5,7 +5,7 @@ namespace OrderBookExecution.Api.Dto;
 
 public class GetOrderBookExecutionResDto
 {
-    public List<GetOrderBookExecutionActionDto> ExecutionActons { get; set; }
+    public List<GetOrderBookExecutionActionDto> ExecutionActions { get; set; }
     public bool IsFullyFilled { get; set; }
     public decimal? RemainingAmountToFill { get; set; }
 }

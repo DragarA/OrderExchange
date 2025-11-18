@@ -6,7 +6,6 @@ namespace OrderBookExecution.Api.Dto;
 public class GetOrderBookExecutionReqDto
 {
     [Required]
-    [EnumDataType(typeof(OrderType))]
     public OrderType OrderType { get; set; }
 
     [Required]

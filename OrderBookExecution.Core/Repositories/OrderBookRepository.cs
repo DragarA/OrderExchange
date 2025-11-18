@@ -46,7 +46,7 @@ public class OrderBookRepository: IOrderBookRepository
         }
     }
 
-    public Exchange ParseJsonLineToExchange(string line)
+    private Exchange ParseJsonLineToExchange(string line)
     {
         var splitValues = line.Split('\t');
 
