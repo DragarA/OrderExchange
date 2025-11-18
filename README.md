@@ -70,7 +70,9 @@ dotnet run --project OrderBookExecution.Api
 ```
 
 By default, the API exposes:
+
 Scalar UI: http://localhost:5298/scalar
+
 OpenAPI JSON: http://localhost:5298/openapi/v1.json
 
 Example request (POST /api/OrderBookExecution):
@@ -82,8 +84,22 @@ Example request (POST /api/OrderBookExecution):
 }
 ```
 
-The response is a list of execution actions with exchange ID, price, amount and order side.
+The response is a list of execution actions with exchange ID, price, amount and order side. If the order could not be fully fulfilled, we indicate taht via the `isFullyFilled` flag and return the unfilled amount.  
 
+```json
+{
+  "executionActions": [
+    {
+      "orderType": "Buy",
+      "exchangeId": "1548763106.9417",
+      "amount": 0.01,
+      "price": 2955.03
+    }
+  ],
+  "isFullyFilled": true,
+  "remainingAmountToFill": null
+}
+```
 ### Running the API through Docker
 
 From the Repository root: 
