@@ -1,6 +1,7 @@
 ﻿services:
   orderbookexecution.api:
     image: orderbookexecution.api
+    platform: linux/amd64
     build:
       context: .
       dockerfile: OrderBookExecution.Api/Dockerfile
@@ -9,4 +10,3 @@
     environment:
       ASPNETCORE_ENVIRONMENT: "Production"
       DataSource:FilePath: "data/order_books_data"
-

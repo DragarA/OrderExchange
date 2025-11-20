@@ -11,6 +11,8 @@ It includes the following parts:
 
 ---
 
+
+
 ## How it works
 
 1. The repository loads order books from the provided data file (one exchange per line).
@@ -112,7 +114,19 @@ This will build and run the docker image.
 
 The API will be exposed on the port :8080. 
 
-Source data for order books will be pulled and integrated into the image from the same source as regular application build (`data/order_books_data`). 
+Source data for order books will be pulled and integrated into the image from the same source as regular application build (`data/order_books_data`).
+
+## Live Demo - AWS Deployment
+
+The API is deployed to AWS with the following infrastructure:
+
+- VPC with public/private subnet architecture
+- Application Load Balancer for high availability
+- Containerized deployment
+
+**Live API endpoint:** `http://alb-orderbook-api-1491217945.eu-north-1.elb.amazonaws.com/`
+
+API documentation: `http://alb-orderbook-api-1491217945.eu-north-1.elb.amazonaws.com/scalar/`
 
 ## Running tests
 From the repository root:

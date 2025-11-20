@@ -9,11 +9,12 @@ namespace OrderBookExecution.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class OrderBookExecutionController(IOrderBookExecutionService orderBookExecutionService) : ControllerBase
+public class OrderBookExecutionController(IOrderBookExecutionService orderBookExecutionService, ILogger<OrderBookExecutionController> logger) : ControllerBase
 {
     [HttpPost]
     public async Task<ActionResult<List<GetOrderBookExecutionResDto>>> Post([FromBody] GetOrderBookExecutionReqDto orderBookExecutionReq)
     {
+        logger.LogInformation($"Received request to get order book execution, {orderBookExecutionReq.Amount} {orderBookExecutionReq.OrderType}");
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 

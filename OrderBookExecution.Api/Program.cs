@@ -10,6 +10,8 @@ builder.Services.AddControllers();
 
 builder.Services.AddOpenApi();
 
+builder.Services.AddHealthChecks();
+
 var app = builder.Build();
 
 app.UseHttpsRedirection();
@@ -20,6 +22,8 @@ app.MapControllers();
 
 app.MapOpenApi();
 app.MapScalarApiReference();
+
+app.MapHealthChecks("/healthz");
 
 app.Run();
 
