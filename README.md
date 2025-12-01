@@ -124,9 +124,9 @@ The API is deployed to AWS with the following infrastructure:
 - Application Load Balancer for high availability
 - Containerized deployment
 
-**Live API endpoint:** `http://alb-orderbook-api-1491217945.eu-north-1.elb.amazonaws.com/`
+**Live API endpoint:** `http://alb-orderbook-105706505.eu-north-1.elb.amazonaws.com/`
 
-API documentation: `http://alb-orderbook-api-1491217945.eu-north-1.elb.amazonaws.com/scalar/`
+API documentation: `http://alb-orderbook-105706505.eu-north-1.elb.amazonaws.com/scalar`
 
 ## Running tests
 From the repository root:
